@@ -1,0 +1,228 @@
+{
+  "model_metadata": {
+    "algorithm": "RandomForestRegressor (Ensemble of 100 Decision Trees)",
+    "solar_model_r2": 0.9989,
+    "solar_model_rmse": 0.0468,
+    "load_model_r2": 0.951,
+    "load_model_rmse": 0.209,
+    "training_samples": 2160
+  },
+  "forecast_24h": [
+    {
+      "hour": "00:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.6,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.6,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 0.6 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "01:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.5,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.5,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "02:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.44,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.44,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "03:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.42,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.42,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "04:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.47,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.47,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "05:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.6,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.6,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 0.6 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "06:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.66,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.66,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 0.66 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "07:00",
+      "predicted_solar_kwh": 1.2,
+      "predicted_load_kwh": 1.57,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.37,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "08:00",
+      "predicted_solar_kwh": 2.26,
+      "predicted_load_kwh": 2.32,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.06,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "09:00",
+      "predicted_solar_kwh": 3.23,
+      "predicted_load_kwh": 1.75,
+      "predicted_surplus_kwh": 1.48,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 1.48 kWh available. High trading profit window."
+    },
+    {
+      "hour": "10:00",
+      "predicted_solar_kwh": 3.79,
+      "predicted_load_kwh": 0.64,
+      "predicted_surplus_kwh": 3.15,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 3.15 kWh available. High trading profit window."
+    },
+    {
+      "hour": "11:00",
+      "predicted_solar_kwh": 4.21,
+      "predicted_load_kwh": 0.47,
+      "predicted_surplus_kwh": 3.74,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 3.74 kWh available. High trading profit window."
+    },
+    {
+      "hour": "12:00",
+      "predicted_solar_kwh": 4.46,
+      "predicted_load_kwh": 0.52,
+      "predicted_surplus_kwh": 3.94,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 3.94 kWh available. High trading profit window."
+    },
+    {
+      "hour": "13:00",
+      "predicted_solar_kwh": 4.21,
+      "predicted_load_kwh": 0.46,
+      "predicted_surplus_kwh": 3.75,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 3.75 kWh available. High trading profit window."
+    },
+    {
+      "hour": "14:00",
+      "predicted_solar_kwh": 3.84,
+      "predicted_load_kwh": 0.44,
+      "predicted_surplus_kwh": 3.4,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 3.4 kWh available. High trading profit window."
+    },
+    {
+      "hour": "15:00",
+      "predicted_solar_kwh": 3.24,
+      "predicted_load_kwh": 0.47,
+      "predicted_surplus_kwh": 2.77,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 2.77 kWh available. High trading profit window."
+    },
+    {
+      "hour": "16:00",
+      "predicted_solar_kwh": 2.29,
+      "predicted_load_kwh": 0.49,
+      "predicted_surplus_kwh": 1.8,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "RECOMMEND_SELL",
+      "reason": "Solar surplus of 1.8 kWh available. High trading profit window."
+    },
+    {
+      "hour": "17:00",
+      "predicted_solar_kwh": 1.2,
+      "predicted_load_kwh": 0.72,
+      "predicted_surplus_kwh": 0.48,
+      "predicted_deficit_kwh": 0.0,
+      "recommendation": "GRID_BALANCED",
+      "reason": "Generation matches consumption. Zero trade required."
+    },
+    {
+      "hour": "18:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 1.35,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 1.35,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 1.35 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "19:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 2.94,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 2.94,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 2.94 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "20:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 3.79,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 3.79,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 3.79 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "21:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 2.81,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 2.81,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 2.81 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "22:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 1.58,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 1.58,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 1.58 kWh anticipated. Schedule microgrid P2P purchase."
+    },
+    {
+      "hour": "23:00",
+      "predicted_solar_kwh": 0.0,
+      "predicted_load_kwh": 0.65,
+      "predicted_surplus_kwh": 0.0,
+      "predicted_deficit_kwh": 0.65,
+      "recommendation": "RECOMMEND_BUY",
+      "reason": "Deficit of 0.65 kWh anticipated. Schedule microgrid P2P purchase."
+    }
+  ]
+}

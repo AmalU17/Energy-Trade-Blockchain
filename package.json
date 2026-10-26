@@ -1,0 +1,25 @@
+{
+  "name": "voltp2p-energy-trading",
+  "version": "1.0.0",
+  "description": "Peer-to-Peer Renewable Energy Marketplace using Smart Contracts, ML Forecasting, and IoT Telemetry",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "ml:train": "python ml_engine/energy_predictor.py",
+    "ml:match": "python ml_engine/matching_engine.py"
+  },
+  "keywords": [
+    "blockchain",
+    "solidity",
+    "smart-contracts",
+    "remix-ide",
+    "ethereum",
+    "p2p-energy",
+    "machine-learning"
+  ],
+  "author": "VoltP2P Research Team",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "^5.7.2"
+  }
+}

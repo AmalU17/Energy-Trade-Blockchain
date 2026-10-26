@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltP2P | Decentralized Renewable Energy Trading Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Chart.js CDN for ML Forecast visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Ethers.js CDN for Web3/MetaMask interaction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-header">
+      <div class="brand">
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+          <h1>Volt<span>P2P</span></h1>
+          <p>Decentralized Renewable Microgrid Marketplace</p>
+        </div>
+      </div>
+
+      <!-- Contract Address Quick Configuration -->
+      <div class="contract-bar">
+        <span class="label">Contract:</span>
+        <input type="text" id="contractAddressInput" placeholder="0x..." />
+        <button id="saveContractBtn" class="btn-sm">Set Address</button>
+      </div>
+
+      <!-- Wallet & Network Controls -->
+      <div class="wallet-controls">
+        <div class="network-badge" id="networkBadge">
+          <span class="status-dot disconnected" id="networkDot"></span>
+          <span id="networkName">MetaMask Disconnected</span>
+        </div>
+        <button id="connectWalletBtn" class="btn btn-primary">
+          <span class="btn-icon">🦊</span> Connect MetaMask
+        </button>
+      </div>
+    </header>
+
+    <!-- Wallet Info Banner (Hidden until connected) -->
+    <section class="account-strip" id="accountStrip" style="display: none;">
+      <div class="account-item">
+        <span class="label">MetaMask Account:</span>
+        <span class="val mono" id="accountAddress" title="Click to copy">0x000...000</span>
+        <button id="copyAddressBtn" class="btn-icon-sm" title="Copy Address">📋</button>
+      </div>
+      <div class="account-item">
+        <span class="label">ETH Balance:</span>
+        <span class="val mono text-gold" id="accountBalance">0.0000 ETH</span>
+        <button id="refreshBalanceBtn" class="btn-icon-sm" title="Refresh Balance">🔄</button>
+      </div>
+      <div class="account-item">
+        <span class="label">Assigned Zone:</span>
+        <select id="userZoneSelect" class="custom-select-inline" title="Select your microgrid zone">
+          <option value="1">Zone 1 - Downtown Residential</option>
+          <option value="2">Zone 2 - North Tech Park</option>
+          <option value="3">Zone 3 - West Solar Microgrid</option>
+          <option value="4">Zone 4 - East Campus Cluster</option>
+          <option value="5">Zone 5 - Suburban Heights</option>
+        </select>
+      </div>
+      <div class="account-item" id="faucetItem" style="display: none;">
+        <a href="https://sepoliafaucet.com" target="_blank" rel="noopener noreferrer" class="btn-sm btn-emerald" style="text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+          🚰 Sepolia Faucet ↗
+        </a>
+      </div>
+      <div class="account-item">
+        <button id="switchAccountBtn" class="btn-sm btn-secondary" title="Switch Account in MetaMask">🔄 Switch Account</button>
+        <button id="disconnectBtn" class="btn-sm btn-secondary" title="Disconnect MetaMask">Disconnect</button>
+      </div>
+    </section>
+
+    <!-- Main Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="tab-marketplace">🛒 P2P Marketplace</button>
+      <button class="tab-btn" data-tab="tab-meter">📟 Smart-Meter Simulator</button>
+      <button class="tab-btn" data-tab="tab-ml">🤖 ML Solar & Demand Forecaster</button>
+      <button class="tab-btn" data-tab="tab-ledger">⛓️ Blockchain Ledger & History</button>
+    </nav>
+
+    <!-- TAB 1: P2P MARKETPLACE -->
+    <main class="tab-content active" id="tab-marketplace">
+      <div class="grid-2col">
+        <!-- Left: List Energy Form -->
+        <div class="card glass">
+          <div class="card-header">
+            <h3>⚡ List Surplus Solar Energy</h3>
+            <span class="sub-badge">Prosumer Seller Panel</span>
+          </div>
+          <p class="card-desc">Publish your real-time or forecasted excess solar energy directly onto the Solidity Smart Contract.</p>
+          
+          <form id="listEnergyForm" class="form-grid">
+            <div class="form-group">
+              <label for="listKwh">Energy Quantity (kWh)</label>
+              <div class="input-with-addon">
+                <input type="number" id="listKwh" step="0.1" min="0.1" placeholder="e.g. 15.0" required />
+                <span class="addon">kWh</span>
+              </div>
+              <small class="helper-text" id="meterSurplusHelper">Current Smart Meter Surplus: 0.0 kWh</small>
+            </div>
+
+            <div class="form-group">
+              <label for="listPrice">Unit Price (ETH per kWh)</label>
+              <div class="input-with-addon">
+                <input type="number" id="listPrice" step="0.00001" min="0.000001" placeholder="e.g. 0.0001" required />
+                <span class="addon">ETH/kWh</span>
+              </div>
+              <small class="helper-text">Recommended Market Rate: 0.00008 - 0.00015 ETH</small>
+            </div>
+
+            <div class="form-group">
+              <label for="listZone">Microgrid Cluster / Zone</label>
+              <select id="listZone" class="custom-select">
+                <option value="1">Zone 1 - Downtown Residential</option>
+                <option value="2">Zone 2 - North Tech Park</option>
+                <option value="3">Zone 3 - West Solar Microgrid</option>
+                <option value="4">Zone 4 - East Campus Cluster</option>
+                <option value="5">Zone 5 - Suburban Heights</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" id="useSurplusBtn" class="btn btn-secondary">⚡ Auto-fill Meter Surplus</button>
+              <button type="submit" id="submitListingBtn" class="btn btn-emerald">
+                🚀 List on Blockchain
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right: Multi-Objective Matching Controls & Highlights -->
+        <div class="card glass">
+          <div class="card-header">
+            <h3>🎯 Smart Matching Engine</h3>
+            <span class="badge badge-cyan">AI + Grid Loss Aware</span>
+          </div>
+          <p class="card-desc">Matches buyers to the best sellers by factoring in transmission line resistance loss and price optimization.</p>
+
+          <div class="matching-controls">
+            <div class="form-group">
+              <label>Your Buying Zone (Consumer Location):</label>
+              <select id="buyerZoneSelect" class="custom-select">
+                <option value="1">Zone 1 - Downtown Residential</option>
+                <option value="2">Zone 2 - North Tech Park</option>
+                <option value="3">Zone 3 - West Solar Microgrid</option>
+                <option value="4">Zone 4 - East Campus Cluster</option>
+                <option value="5">Zone 5 - Suburban Heights</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Energy Needed (kWh):</label>
+              <input type="number" id="matchNeededKwh" value="10" min="1" step="0.5" />
+            </div>
+
+            <div class="toggle-wrap">
+              <label class="switch">
+                <input type="checkbox" id="smartMatchingToggle" checked>
+                <span class="slider round"></span>
+              </label>
+              <span>Enable AI Multi-Objective Ranking (Min Loss + Min Price)</span>
+            </div>
+          </div>
+
+          <div class="loss-formula-box">
+            <h4>Physical Microgrid Loss Formula:</h4>
+            <code>Loss% = min(25%, 4% × |Zone_Seller - Zone_Buyer|^1.3)</code>
+            <p>Buying from adjacent zones reduces line transmission dissipation and maximizes green energy delivery.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Marketplace Table -->
+      <section class="card glass full-width mt-4">
+        <div class="card-header flex-between">
+          <div>
+            <h3>🌐 Active Energy Listings</h3>
+            <p class="card-desc">Live community offers registered on the Smart Contract</p>
+          </div>
+          <button id="refreshListingsBtn" class="btn btn-sm btn-secondary">🔄 Refresh Listings</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table" id="listingsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Seller</th>
+                <th>Available</th>
+                <th>Unit Price</th>
+                <th>Zone</th>
+                <th>Est. Line Loss</th>
+                <th>Match Score</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="listingsTableBody">
+              <tr>
+                <td colspan="8" class="text-center py-4">Connecting to blockchain smart contract...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- TAB 2: SMART METER SIMULATOR -->
+    <main class="tab-content" id="tab-meter">
+      <div class="grid-2col">
+        <!-- Live Meter Telemetry -->
+        <div class="card glass">
+          <div class="card-header">
+            <h3>📟 IoT Smart-Meter Telemetry</h3>
+            <span class="badge badge-emerald">Live Simulation</span>
+          </div>
+          <p class="card-desc">Simulates a bi-directional smart inverter capturing real-time solar generation vs household load.</p>
+
+          <div class="meter-gauges">
+            <div class="gauge-card solar">
+              <div class="gauge-icon">☀️</div>
+              <div class="gauge-val" id="meterSolarVal">4.85 <span class="unit">kW</span></div>
+              <div class="gauge-label">Solar PV Generation</div>
+            </div>
+
+            <div class="gauge-card load">
+              <div class="gauge-icon">💡</div>
+              <div class="gauge-val" id="meterLoadVal">1.60 <span class="unit">kW</span></div>
+              <div class="gauge-label">Household Consumption</div>
+            </div>
+
+            <div class="gauge-card net" id="netBalanceCard">
+              <div class="gauge-icon">⚖️</div>
+              <div class="gauge-val" id="meterNetVal">+3.25 <span class="unit">kW</span></div>
+              <div class="gauge-label" id="netBalanceLabel">Net Surplus (Prosumer)</div>
+            </div>
+          </div>
+
+          <!-- Time of Day Quick Simulator Controls -->
+          <div class="sim-presets mt-4">
+            <h4>Quick Time-of-Day Presets:</h4>
+            <div class="preset-buttons">
+              <button class="btn-preset" data-preset="night">🌙 Night (02:00)<br><small>0 kW Gen / 0.5 kW Load</small></button>
+              <button class="btn-preset" data-preset="morning">🌅 Morning (08:00)<br><small>1.8 kW Gen / 2.8 kW Load</small></button>
+              <button class="btn-preset active" data-preset="noon">☀️ Solar Noon (13:00)<br><small>5.0 kW Gen / 1.5 kW Load</small></button>
+              <button class="btn-preset" data-preset="evening">🌆 Evening Peak (20:00)<br><small>0 kW Gen / 3.8 kW Load</small></button>
+            </div>
+          </div>
+
+          <!-- Fine Tuning Sliders -->
+          <div class="slider-controls mt-4">
+            <div class="slider-group">
+              <label>Solar Generation: <span id="solarSliderVal">4.85</span> kW</label>
+              <input type="range" id="solarSlider" min="0" max="8" step="0.05" value="4.85">
+            </div>
+            <div class="slider-group">
+              <label>Household Load: <span id="loadSliderVal">1.60</span> kW</label>
+              <input type="range" id="loadSlider" min="0.2" max="6" step="0.05" value="1.60">
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button id="syncMeterBtn" class="btn btn-emerald full-width">
+              📡 Sync Meter Telemetry to Blockchain Smart Contract
+            </button>
+          </div>
+        </div>
+
+        <!-- Meter Specs & Architecture Info -->
+        <div class="card glass">
+          <div class="card-header">
+            <h3>🏗️ Hardware & Smart Contract Architecture</h3>
+            <span class="badge badge-purple">Grid Integration</span>
+          </div>
+
+          <div class="info-block">
+            <h4>Smart-Meter Data Pipeline:</h4>
+            <ul class="styled-list">
+              <li><strong>Inverter Interface:</strong> RS485 / Modbus protocol reading voltage, current, active power (kW).</li>
+              <li><strong>Local Gateway:</strong> Aggregates 15-minute energy intervals (kWh) and signs payload using ECDSA.</li>
+              <li><strong>Blockchain Oracles:</strong> Meter telemetry is committed to <code>updateMeterReading()</code> on the Solidity smart contract.</li>
+              <li><strong>Tamper-Proof Guarantee:</strong> Prevents prosumers from listing phantom energy they have not actually generated.</li>
+            </ul>
+          </div>
+
+          <div class="info-block mt-4">
+            <h4>Live Smart Meter State on Contract:</h4>
+            <div class="code-box">
+              <p>Household: <span class="mono" id="contractMeterHousehold">Not loaded</span></p>
+              <p>On-Chain Solar Gen: <span class="mono" id="contractMeterSolar">0 kWh</span></p>
+              <p>On-Chain Consumption: <span class="mono" id="contractMeterConsumption">0 kWh</span></p>
+              <p>Verified Surplus: <span class="mono text-emerald" id="contractMeterSurplus">0 kWh</span></p>
+              <p>Last Synced Block Timestamp: <span class="mono" id="contractMeterTimestamp">N/A</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 3: MACHINE LEARNING FORECASTER -->
+    <main class="tab-content" id="tab-ml">
+      <div class="card glass full-width">
+        <div class="card-header flex-between">
+          <div>
+            <h3>🤖 ML 24-Hour Solar PV & Demand Load Forecaster</h3>
+            <p class="card-desc">Trained Random Forest Regression Model forecasting day-ahead microgrid availability</p>
+          </div>
+          <div class="model-pills">
+            <span class="pill">Solar R²: <strong id="mlSolarR2">0.9989</strong></span>
+            <span class="pill">Load R²: <strong id="mlLoadR2">0.9510</strong></span>
+            <span class="pill">Algorithm: <strong>Random Forest Regressor</strong></span>
+          </div>
+        </div>
+
+        <!-- Chart Container -->
+        <div class="chart-container" style="position: relative; height:320px; width:100%">
+          <canvas id="forecastChart"></canvas>
+        </div>
+
+        <!-- Predictive Trading Decision Cards -->
+        <div class="forecast-cards-grid mt-4" id="forecastCardsGrid">
+          <!-- Dynamically filled with ML 4-hour highlights -->
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 4: BLOCKCHAIN LEDGER & AUDIT TRAIL -->
+    <main class="tab-content" id="tab-ledger">
+      <div class="card glass full-width">
+        <div class="card-header flex-between">
+          <div>
+            <h3>⛓️ Immutable Blockchain Trade Settlement Ledger</h3>
+            <p class="card-desc">Cryptographically verified peer-to-peer digital energy settlements executed on Ethereum</p>
+          </div>
+          <button id="refreshLedgerBtn" class="btn btn-sm btn-secondary">🔄 Refresh Ledger</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table" id="ledgerTable">
+            <thead>
+              <tr>
+                <th>Trade ID</th>
+                <th>Listing Ref</th>
+                <th>Seller</th>
+                <th>Buyer</th>
+                <th>Energy Settled</th>
+                <th>Total Value (ETH)</th>
+                <th>Settlement Timestamp</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="ledgerTableBody">
+              <tr>
+                <td colspan="8" class="text-center py-4">No verified transactions yet. Complete a trade in the Marketplace!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Live Event Stream Console -->
+    <footer class="app-console">
+      <div class="console-header">
+        <span class="console-title">🖥️ Web3 & Smart Contract Event Stream</span>
+        <button id="clearConsoleBtn" class="btn-text">Clear</button>
+      </div>
+      <div class="console-body" id="consoleBody">
+        <div class="log-line info">[System] VoltP2P Microgrid dApp Initialized.</div>
+        <div class="log-line">[Remix IDE] Smart Contract ABI loaded successfully.</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MetaMask Not Installed Modal -->
+  <div class="modal-overlay" id="metaMaskInstallModal" style="display: none;">
+    <div class="modal-box glass">
+      <div class="modal-header">
+        <h3>🦊 MetaMask Required</h3>
+        <button class="modal-close" id="closeInstallModalBtn">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div style="font-size: 3rem; margin: 0.5rem 0;">🦊</div>
+        <h4>MetaMask Extension Not Detected</h4>
+        <p class="card-desc mt-2" style="font-size: 0.85rem; line-height: 1.6;">
+          VoltP2P is a decentralized Web3 application that connects directly to your <strong>MetaMask Wallet</strong> to sign smart contract transactions, list renewable solar energy, and settle atomic peer-to-peer trades on Ethereum.
+        </p>
+        <div class="modal-actions mt-4">
+          <a href="https://metamask.io/download/" target="_blank" rel="noopener noreferrer" class="btn btn-primary full-width" style="text-decoration:none; display:flex; justify-content:center; align-items:center; gap:8px;">
+            <span>🦊</span> Download & Install MetaMask ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Purchase Modal -->
+  <div class="modal-overlay" id="purchaseModal" style="display: none;">
+    <div class="modal-box glass">
+      <div class="modal-header">
+        <h3>⚡ Confirm Energy Purchase</h3>
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>You are purchasing green solar energy through the smart contract.</p>
+        <div class="trade-summary">
+          <p>Listing ID: <strong id="modalListingId">#1</strong></p>
+          <p>Seller: <strong class="mono" id="modalSeller">0x...</strong></p>
+          <p>Unit Price: <strong id="modalUnitPrice">0.0001 ETH/kWh</strong></p>
+          <p>Seller Zone: <strong id="modalSellerZone">Zone 1</strong></p>
+          <p>Transmission Line Loss: <strong class="text-cyan" id="modalLoss">0%</strong></p>
+        </div>
+
+        <div class="form-group mt-3">
+          <label for="modalBuyKwh">Quantity to Purchase (kWh):</label>
+          <input type="number" id="modalBuyKwh" min="0.1" step="0.1" value="5" />
+        </div>
+
+        <div class="cost-breakdown mt-3">
+          <div class="cost-row">
+            <span>Energy Delivered:</span>
+            <span id="modalDeliveredKwh">5.0 kWh</span>
+          </div>
+          <div class="cost-row total">
+            <span>Total Cost (ETH):</span>
+            <span class="text-gold" id="modalTotalEth">0.0005 ETH</span>
+          </div>
+        </div>
+
+        <div class="modal-actions mt-4">
+          <button id="confirmBuyBtn" class="btn btn-emerald full-width">
+            🦊 Confirm & Sign with MetaMask
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="abi.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
