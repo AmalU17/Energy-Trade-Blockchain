@@ -109,7 +109,4 @@ python ml_engine/energy_predictor.py
 
 ---
 
-## 📚 Evaluation & Viva Resources
-- 📄 **AUMS Synopsis Report (Max 5 Pages)**: [`docs/PROJECT_SYNOPSIS_REPORT.md`](docs/PROJECT_SYNOPSIS_REPORT.md)
-- 🎙️ **Oral Presentation & Viva Script (3 Marks Binary)**: [`docs/ORAL_PRESENTATION_SCRIPT.md`](docs/ORAL_PRESENTATION_SCRIPT.md)
-- 🛠️ **Remix IDE Deployment Guide**: [`docs/REMIX_DEPLOYMENT_GUIDE.md`](docs/REMIX_DEPLOYMENT_GUIDE.md)
+
